@@ -1,0 +1,1436 @@
+{
+	"info": {
+		"_postman_id": "8be21673-3c23-41b5-97a2-b64712c3a9ee",
+		"name": "3.Scripts",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "20498670"
+	},
+	"item": [
+		{
+			"name": "1.pre-request script",
+			"item": [
+				{
+					"name": "1.Pre-request Script",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.environment.set(\"timestampHeader\", new Date());"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "timestamp",
+								"value": "{{timestampHeader}}",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY",
+							"protocol": "https",
+							"host": [
+								"api",
+								"nasa",
+								"gov"
+							],
+							"path": [
+								"planetary",
+								"apod"
+							],
+							"query": [
+								{
+									"key": "api_key",
+									"value": "DEMO_KEY"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "2.api-tests",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// console.log(\"what are you doing ?\");\r",
+									"// pm.globals.set(\"key1\", \"value1\");\r",
+									"// pm.environment.set(\"key2\", \"value2\");\r",
+									"\r",
+									"//// pm.globals.unset(\"key1\");\r",
+									"//// pm.environment.unset(\"key2\");\r",
+									"\r",
+									"// console.log(pm.globals.get(\"key1\"));\r",
+									"// console.log(pm.environment.get(\"key2\"));\r",
+									"// console.log(pm.variables.get(\"name\"));\r",
+									"\r",
+									"pm.sendRequest(\"https://postman-echo.com/get\",function (err,response) {\r",
+									"    console.log(response.json());\r",
+									"    });"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://aider.meizu.com/app/weather/listWeather?cityIds=101191104",
+							"protocol": "http",
+							"host": [
+								"aider",
+								"meizu",
+								"com"
+							],
+							"path": [
+								"app",
+								"weather",
+								"listWeather"
+							],
+							"query": [
+								{
+									"key": "cityIds",
+									"value": "101191104"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "2.test script",
+			"item": [
+				{
+					"name": "1-1.test script assert",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Body matchs string  '武进' \",function(){\r",
+									"    pm.expect(pm.response.text()).to.include(\"武进\");\r",
+									"});\r",
+									"\r",
+									"// pm.test(\"Body is correct\", function () {\r",
+									"//     pm.response.to.have.body(\"常州\");\r",
+									"// });\r",
+									"\r",
+									"pm.test(\"JSON_CODE eq 200 \",function(){\r",
+									"    var JSONDATA = pm.response.json();\r",
+									"    console.log(JSONDATA);\r",
+									"    pm.expect(Number(JSONDATA.code)).to.eql(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"JSON_VALUE_LEN eq 2 \",function(){\r",
+									"    var JSONDATA = pm.response.json();\r",
+									"    console.log(JSONDATA);\r",
+									"    pm.expect(JSONDATA.value.length).to.eql(2);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"CContent-Type Header is present\",function(){\r",
+									"    pm.response.to.have.header(\"Content-Type\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://aider.meizu.com/app/weather/listWeather?cityIds=101191104&cityIds=101010100",
+							"protocol": "http",
+							"host": [
+								"aider",
+								"meizu",
+								"com"
+							],
+							"path": [
+								"app",
+								"weather",
+								"listWeather"
+							],
+							"query": [
+								{
+									"key": "cityIds",
+									"value": "101191104"
+								},
+								{
+									"key": "cityIds",
+									"value": "101010100"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "1-2.test script assert",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response time is less than 200ms\",function(){\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(900);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Status code is 200\",function(){\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Status code name has OK\",function(){\r",
+									"    pm.response.to.have.status(\"OK\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Successful GET request\",function(){\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200,201,202]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://aider.meizu.com/app/weather/listWeather?cityIds=101191104&cityIds=101010100",
+							"protocol": "http",
+							"host": [
+								"aider",
+								"meizu",
+								"com"
+							],
+							"path": [
+								"app",
+								"weather",
+								"listWeather"
+							],
+							"query": [
+								{
+									"key": "cityIds",
+									"value": "101191104"
+								},
+								{
+									"key": "cityIds",
+									"value": "101010100"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "1-3.test script assert轻量级",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"/*\r",
+									"var schema = {\r",
+									"    \"items\":{\r",
+									"        \"type\":\"boolean\"\r",
+									"    }\r",
+									"};\r",
+									"var data1 = [true,false];\r",
+									"var data2 = [true,123];\r",
+									"pm.test(\"Schema is valid\",function(){\r",
+									"    pm.expect(tv4.validate(data1,schema)).to.be.true;\r",
+									"    pm.expect(tv4.validate(data2,schema)).to.be.false;\r",
+									"});\r",
+									"*/\r",
+									"var schema = {\r",
+									"    \"properties\":{\r",
+									"        \"code\":{\"type\":\"string\"},\r",
+									"        \"message\":{\"type\":\"string\"},\r",
+									"        \"redirect\":{\"type\":\"string\"},\r",
+									"        \"value\":{\"type\":\"array\"}//[]数组\r",
+									"        // \"value\":{\"type\":\"object\"}\r",
+									"    }\r",
+									"};\r",
+									"var data = JSON.parse(responseBody);\r",
+									"pm.test(\"Schema is valid\",function(){\r",
+									"    pm.expect(tv4.validate(data,schema)).to.be.true;\r",
+									"});\r",
+									"\r",
+									"tests[\"Valid data schema\"] = tv4.validate(data,schema);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://aider.meizu.com/app/weather/listWeather?cityIds=101191104&cityIds=101010100",
+							"protocol": "http",
+							"host": [
+								"aider",
+								"meizu",
+								"com"
+							],
+							"path": [
+								"app",
+								"weather",
+								"listWeather"
+							],
+							"query": [
+								{
+									"key": "cityIds",
+									"value": "101191104"
+								},
+								{
+									"key": "cityIds",
+									"value": "101010100"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "2.XmlToJson",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"console.log(xml2Json(responseBody));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://wthrcdn.etouch.cn/WeatherApi?citykey=101191101",
+							"protocol": "http",
+							"host": [
+								"wthrcdn",
+								"etouch",
+								"cn"
+							],
+							"path": [
+								"WeatherApi"
+							],
+							"query": [
+								{
+									"key": "citykey",
+									"value": "101191101"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "3.test script advanced",
+			"item": [
+				{
+					"name": "1.responseBody",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var data1 = responseBody;\r",
+									"var data2 = JSON.parse(responseBody);\r",
+									"\r",
+									"console.log(typeof data1);\r",
+									"console.log(data1);\r",
+									"\r",
+									"console.log(typeof data2);\r",
+									"console.log(data2);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://aider.meizu.com/app/weather/listWeather?cityIds=101191104&cityIds=101010100",
+							"protocol": "http",
+							"host": [
+								"aider",
+								"meizu",
+								"com"
+							],
+							"path": [
+								"app",
+								"weather",
+								"listWeather"
+							],
+							"query": [
+								{
+									"key": "cityIds",
+									"value": "101191104"
+								},
+								{
+									"key": "cityIds",
+									"value": "101010100"
+								}
+							]
+						},
+						"description": "1.responseBody，即响应体，类型为string，可以利用JSON.parse(responseBody)将其转换为对象。"
+					},
+					"response": []
+				},
+				{
+					"name": "2.pm.response",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var data1 = pm.response;//响应信息，包括Body，code，Status，Headers，Cookies等\r",
+									"var data2 = pm.response.json();//将相应信息中的JSON字符串转换成对象，仅包含Body\r",
+									"\r",
+									"console.log(typeof data1);\r",
+									"console.log(data1);\r",
+									"\r",
+									"console.log(typeof data2);\r",
+									"console.log(data2);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://aider.meizu.com/app/weather/listWeather?cityIds=101191104&cityIds=101010100",
+							"protocol": "http",
+							"host": [
+								"aider",
+								"meizu",
+								"com"
+							],
+							"path": [
+								"app",
+								"weather",
+								"listWeather"
+							],
+							"query": [
+								{
+									"key": "cityIds",
+									"value": "101191104"
+								},
+								{
+									"key": "cityIds",
+									"value": "101010100"
+								}
+							]
+						},
+						"description": "1.responseBody，即响应体，类型为string，可以利用JSON.parse(responseBody)将其转换为对象。"
+					},
+					"response": []
+				},
+				{
+					"name": "3.response.json().value",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"CityID is correct\",function(){\r",
+									"    var jsonDATA = pm.response.json();\r",
+									"    pm.expect(jsonDATA.value[1].cityid).to.be.eql(101010100);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://aider.meizu.com/app/weather/listWeather?cityIds=101191104&cityIds=101010100",
+							"protocol": "http",
+							"host": [
+								"aider",
+								"meizu",
+								"com"
+							],
+							"path": [
+								"app",
+								"weather",
+								"listWeather"
+							],
+							"query": [
+								{
+									"key": "cityIds",
+									"value": "101191104"
+								},
+								{
+									"key": "cityIds",
+									"value": "101010100"
+								}
+							]
+						},
+						"description": "1.responseBody，即响应体，类型为string，可以利用JSON.parse(responseBody)将其转换为对象。"
+					},
+					"response": []
+				},
+				{
+					"name": "4.setting a nested object as an environment variable",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var array = [1,2,3,4];\r",
+									"pm.environment.set(\"array\",JSON.stringify(array,null,2));\r",
+									"var obj = {a:[1,2,3,4],b:{c:'val'}};\r",
+									"pm.environment.set(\"obj\",JSON.stringify(obj));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://aider.meizu.com/app/weather/listWeather?cityIds=101191104&cityIds=101010100",
+							"protocol": "http",
+							"host": [
+								"aider",
+								"meizu",
+								"com"
+							],
+							"path": [
+								"app",
+								"weather",
+								"listWeather"
+							],
+							"query": [
+								{
+									"key": "cityIds",
+									"value": "101191104"
+								},
+								{
+									"key": "cityIds",
+									"value": "101010100"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "5.getting an environment variable(whose value is a stringified object)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"console.log(JSON.parse(pm.environment.get(\"obj\")));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://aider.meizu.com/app/weather/listWeather?cityIds=101191104&cityIds=101010100",
+							"protocol": "http",
+							"host": [
+								"aider",
+								"meizu",
+								"com"
+							],
+							"path": [
+								"app",
+								"weather",
+								"listWeather"
+							],
+							"query": [
+								{
+									"key": "cityIds",
+									"value": "101191104"
+								},
+								{
+									"key": "cityIds",
+									"value": "101010100"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "4.pm对象",
+			"item": [
+				{
+					"name": "1.pm.info",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.log(pm.info.eventName);\r",
+									"console.log(pm.info.requestName);\r",
+									"console.log(pm.info.requestId);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"console.log(pm.info.eventName);\r",
+									"console.log();\r",
+									"// postman.setNextRequest('9.pm.cookies');//设置下一步要执行的请求\r",
+									"postman.setNextRequest(null);//停止工作流程"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://aider.meizu.com/app/weather/listWeather?cityIds=101191104&cityIds=101010100",
+							"protocol": "http",
+							"host": [
+								"aider",
+								"meizu",
+								"com"
+							],
+							"path": [
+								"app",
+								"weather",
+								"listWeather"
+							],
+							"query": [
+								{
+									"key": "cityIds",
+									"value": "101191104"
+								},
+								{
+									"key": "cityIds",
+									"value": "101010100"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "2.pm.sendRequest",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.sendRequest('https://postman-echo.com/get', function (err, res) {\r",
+									"　　    if (err) {\r",
+									"　　        console.log(err);\r",
+									"　　    } else {\r",
+									"// 　　        pm.environment.set(\"variable_key\", \"new_value\");\r",
+									"　　    }\r",
+									"});\r",
+									"\r",
+									"　const echoPostRequest = {\r",
+									"　　  url: 'https://postman-echo.com/post',\r",
+									"　　  method: 'POST',\r",
+									"　　  header: 'headername1:value1',\r",
+									"　　  body: {\r",
+									"　　    mode: 'raw',\r",
+									"　　    raw: JSON.stringify({ key: 'this is json' })\r",
+									"　　  }\r",
+									"　　};\r",
+									"　　pm.sendRequest(echoPostRequest, function (err, res) {\r",
+									"　　  console.log(err ? err : res.json());\r",
+									"　　});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.sendRequest('https://postman-echo.com/get', function (err, res) {\r",
+									"　　  if (err) { console.log(err); }\r",
+									"　　  pm.test('response should be okay to process', function () {\r",
+									"　　    pm.expect(err).to.equal(null);\r",
+									"　　    pm.expect(res).to.have.property('code', 200);\r",
+									"　　    pm.expect(res).to.have.property('status', 'OK');\r",
+									"　　  });\r",
+									"　　});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://aider.meizu.com/app/weather/listWeather?cityIds=101191104&cityIds=101010100",
+							"protocol": "http",
+							"host": [
+								"aider",
+								"meizu",
+								"com"
+							],
+							"path": [
+								"app",
+								"weather",
+								"listWeather"
+							],
+							"query": [
+								{
+									"key": "cityIds",
+									"value": "101191104"
+								},
+								{
+									"key": "cityIds",
+									"value": "101010100"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "3.pm.globals",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"console.log(pm.globals.has(\"echo_digest_realm\"));//输出 判断是否存在echo_digest_realm的全局变量的bool值\r",
+									"console.log(pm.globals.get(\"echo_digest_realm\"));//输出echo_digest_realm变量的值\r",
+									"pm.globals.set(\"echo_digest_realm\",123,\"Number\");//设置echo_digest_realm变量的值\r",
+									"// pm.globals.unset(\"echo_digest_realm\");//清除echo_digest_realm变量\r",
+									"// pm.globals.clear();//清除所有全局变量"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://aider.meizu.com/app/weather/listWeather?cityIds=101191104&cityIds=101010100",
+							"protocol": "http",
+							"host": [
+								"aider",
+								"meizu",
+								"com"
+							],
+							"path": [
+								"app",
+								"weather",
+								"listWeather"
+							],
+							"query": [
+								{
+									"key": "cityIds",
+									"value": "101191104"
+								},
+								{
+									"key": "cityIds",
+									"value": "101010100"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "4.pm.environment",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.environment.set('name','mrjiam');\r",
+									"console.log(pm.environment.has('name'));\r",
+									"console.log(pm.environment.get('name'));\r",
+									"console.log(pm.environment.toObject());\r",
+									"// pm.environment.unset('name','mrjiam');\r",
+									"// pm.environment.clear();"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://aider.meizu.com/app/weather/listWeather?cityIds=101191104&cityIds=101010100",
+							"protocol": "http",
+							"host": [
+								"aider",
+								"meizu",
+								"com"
+							],
+							"path": [
+								"app",
+								"weather",
+								"listWeather"
+							],
+							"query": [
+								{
+									"key": "cityIds",
+									"value": "101191104"
+								},
+								{
+									"key": "cityIds",
+									"value": "101010100"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "5.pm.variables",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"console.log(pm.variables.get('name'));//变量作用范围就近覆盖,迭代数据>环境变量>全局变量,其中迭代数据是运行器选择的文件中数据"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://aider.meizu.com/app/weather/listWeather?cityIds=101191104&cityIds=101010100",
+							"protocol": "http",
+							"host": [
+								"aider",
+								"meizu",
+								"com"
+							],
+							"path": [
+								"app",
+								"weather",
+								"listWeather"
+							],
+							"query": [
+								{
+									"key": "cityIds",
+									"value": "101191104"
+								},
+								{
+									"key": "cityIds",
+									"value": "101010100"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "6.pm.request",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"console.log(pm.request);//在pre中，表示刚刚（上一个）发送的请求"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.log(pm.request);//在pre中，表示将要发送的请求"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://aider.meizu.com/app/weather/listWeather?cityIds=101191104&cityIds=101010100",
+							"protocol": "http",
+							"host": [
+								"aider",
+								"meizu",
+								"com"
+							],
+							"path": [
+								"app",
+								"weather",
+								"listWeather"
+							],
+							"query": [
+								{
+									"key": "cityIds",
+									"value": "101191104"
+								},
+								{
+									"key": "cityIds",
+									"value": "101010100"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "7.pm.response",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"console.log(pm.response.code);//响应代码\r",
+									"console.log(pm.response.reason());//疑似status\r",
+									"console.log(pm.response.headers);\r",
+									"console.log(pm.response.responseTime);//响应时间，单位ms\r",
+									"// console.log(pm.response.text());//响应体\r",
+									"// console.log(pm.response.json());"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://aider.meizu.com/app/weather/listWeather?cityIds=101191104&cityIds=101010100",
+							"protocol": "http",
+							"host": [
+								"aider",
+								"meizu",
+								"com"
+							],
+							"path": [
+								"app",
+								"weather",
+								"listWeather"
+							],
+							"query": [
+								{
+									"key": "cityIds",
+									"value": "101191104"
+								},
+								{
+									"key": "cityIds",
+									"value": "101010100"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "8.pm.iterationData",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"console.log(pm.iterationData.get('name'));//迭代器为集合或者目录运行时选择的csv、json等文件"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://aider.meizu.com/app/weather/listWeather?cityIds=101191104&cityIds=101010100",
+							"protocol": "http",
+							"host": [
+								"aider",
+								"meizu",
+								"com"
+							],
+							"path": [
+								"app",
+								"weather",
+								"listWeather"
+							],
+							"query": [
+								{
+									"key": "cityIds",
+									"value": "101191104"
+								},
+								{
+									"key": "cityIds",
+									"value": "101010100"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "9.pm.cookies",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Has cookies BAIDUID\",function(){\r",
+									"    pm.cookies.has(\"BAIDUID\");\r",
+									"});\r",
+									"\r",
+									"console.log(pm.cookies.get(\"BIDUPSID\"));\r",
+									"console.log(pm.cookies.toObject());\r",
+									"\r",
+									"pm.test(\"response should be okay to process\",function(){\r",
+									"    pm.response.to.not.be.error;\r",
+									"    // pm.response.to.have.jsonBody('head');//返回值是xml，不能使用该断言\r",
+									"    // pm.response.to.not.have.jsonBody('head');\r",
+									"});\r",
+									"pm.test(\"environment variables is correct\",function(){\r",
+									"    pm.expect(pm.environment.get('name')).to.eql('mrjiam');\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://www.baidu.com",
+							"protocol": "https",
+							"host": [
+								"www",
+								"baidu",
+								"com"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "10.响应断言API",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"response should be okay to process\",function(){\r",
+									"    pm.response.to.have.status(200);\r",
+									"    pm.response.to.have.status('OK');\r",
+									"\r",
+									"    pm.response.to.have.header('Connection');\r",
+									"    pm.response.to.have.header('Connection','keep-alive');\r",
+									"\r",
+									"    // pm.response.to.have.body('code');//需要全部匹配\r",
+									"    pm.response.to.have.body(/:\"200/);\r",
+									"\r",
+									"    pm.response.to.have.jsonBody();\r",
+									"    pm.response.to.have.jsonBody('value');\r",
+									"    pm.response.to.have.jsonBody('value[0].city');\r",
+									"    pm.response.to.have.jsonBody('code','200');\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://aider.meizu.com/app/weather/listWeather?cityIds=101191104&cityIds=101010100",
+							"protocol": "http",
+							"host": [
+								"aider",
+								"meizu",
+								"com"
+							],
+							"path": [
+								"app",
+								"weather",
+								"listWeather"
+							],
+							"query": [
+								{
+									"key": "cityIds",
+									"value": "101191104"
+								},
+								{
+									"key": "cityIds",
+									"value": "101010100"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "11.pm.response.to.be",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"response should be okay to process\",function(){\r",
+									"    pm.response.to.be.ok;//pass\r",
+									"    pm.response.to.be.success;//pass\r",
+									"\r",
+									"\r",
+									"    // pm.response.to.be.info;//AssertionError: expected response code to be 1XX but found 200\r",
+									"    \r",
+									"    // pm.response.to.be.redirection;//AssertionError: expected response code to be 3XX but found 200\r",
+									"    \r",
+									"    // pm.response.to.be.clientError;//AssertionError: expected response code to be 4XX but found 200\r",
+									"    \r",
+									"    // pm.response.to.be.serverError;//AssertionError: expected response code to be 5XX but found 200\r",
+									"   \r",
+									"    // pm.response.to.be.error;//AssertionError: expected response code to be 4XX or 5XX but found 200\r",
+									"    \r",
+									"    // pm.response.to.be.accepted;//AssertionError: expected response to have status reason 'ACCEPTED' but got 'OK'\r",
+									"    \r",
+									"    // pm.response.to.be.badRequest;//AssertionError: expected response to have status reason 'BAD REQUEST' but got 'OK'\r",
+									"    \r",
+									"    //pm.response.to.be.unauthorized;//AssertionError: expected response to have status reason 'UNAUTHORIZED' but got 'OK'\r",
+									"    \r",
+									"    // pm.response.to.be.forbidden;//AssertionError: expected response to have status reason 'FORBIDDEN' but got 'OK'\r",
+									"    \r",
+									"    // pm.response.to.be.notFound;//AssertionError: expected response to have status reason 'NOT FOUND' but got 'OK'\r",
+									"    \r",
+									"    // pm.response.to.be.rateLimited;//AssertionError: expected response to have status reason 'TOO MANY REQUESTS' but got 'OK'\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://aider.meizu.com/app/weather/listWeather?cityIds=101191104&cityIds=101010100",
+							"protocol": "http",
+							"host": [
+								"aider",
+								"meizu",
+								"com"
+							],
+							"path": [
+								"app",
+								"weather",
+								"listWeather"
+							],
+							"query": [
+								{
+									"key": "cityIds",
+									"value": "101191104"
+								},
+								{
+									"key": "cityIds",
+									"value": "101010100"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"// console.log(\"index\",pm.info.iteration);",
+							"// console.log(\"total\",pm.info.iterationCount);"
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "5.postman sandbox",
+			"item": [
+				{
+					"name": "1.environment_globals_variables",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"postman.setEnvironmentVariable('name',123);\r",
+									"console.log(postman.getEnvironmentVariable('name'));\r",
+									"\r",
+									"postman.setGlobalVariable('test','abc');\r",
+									"console.log(postman.getGlobalVariable('test'));\r",
+									"\r",
+									"// postman.clearEnvironmentVariable('name1');//仅将该变量清除\r",
+									"// postman.clearEnvironmentVariable();//无效\r",
+									"// postman.clearEnvironmentVariables();//有效，清除所有注意与上条区分\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://aider.meizu.com/app/weather/listWeather?cityIds=101191104&cityIds=101010100",
+							"protocol": "http",
+							"host": [
+								"aider",
+								"meizu",
+								"com"
+							],
+							"path": [
+								"app",
+								"weather",
+								"listWeather"
+							],
+							"query": [
+								{
+									"key": "cityIds",
+									"value": "101191104"
+								},
+								{
+									"key": "cityIds",
+									"value": "101010100"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "2. Dynamic variable",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://postman-echo.com/?guid={{$guid}}&timestamp={{$timestamp}}&randomint={{$randomInt}}",
+							"protocol": "https",
+							"host": [
+								"postman-echo",
+								"com"
+							],
+							"path": [
+								""
+							],
+							"query": [
+								{
+									"key": "guid",
+									"value": "{{$guid}}"
+								},
+								{
+									"key": "timestamp",
+									"value": "{{$timestamp}}"
+								},
+								{
+									"key": "randomint",
+									"value": "{{$randomInt}}"
+								}
+							]
+						},
+						"description": "1.请运行时参考console总控台的url结果"
+					},
+					"response": []
+				},
+				{
+					"name": "3.response.cookies",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"console.log(postman.getResponseCookie('BIDUPSID'));\r",
+									"// console.log(pm.cookies.all);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://www.baidu.com",
+							"protocol": "https",
+							"host": [
+								"www",
+								"baidu",
+								"com"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "4.请求和响应相关",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"console.log(pm.request.body);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.log(pm.request.url);\r",
+									"console.log(pm.request.headers);\r",
+									"console.log(pm.request.method);\r",
+									"pm.request.headers.add({\r",
+									"  key: \"client-id\",\r",
+									"  value: \"abcdef\"\r",
+									"});//在总控台Request Headers可看到"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "foo3",
+									"value": "bar3",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://postman-echo.com/get?foo1=bar1&foo2=bar2",
+							"protocol": "https",
+							"host": [
+								"postman-echo",
+								"com"
+							],
+							"path": [
+								"get"
+							],
+							"query": [
+								{
+									"key": "foo1",
+									"value": "bar1"
+								},
+								{
+									"key": "foo2",
+									"value": "bar2"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
